@@ -11,7 +11,7 @@ import numpy
 
 from ros_arduino_msgs.srv import DigitalWrite
 from ros_arduino_msgs.srv import DigitalSetDirection
-from ros_arduino_msgs.srv import SetServoSpeed, ServoAttach, ServoWrite, ServoRead
+from ros_arduino_msgs.srv import SetServoSpeed, ServoAttach, ServoWrite, ServoRead, ServoDetach
 
 from sensor_msgs.msg import JointState
 from ros_arduino_msgs.msg import Digital
@@ -65,12 +65,14 @@ class ArduinoGripper():
         Set the pin of the gripper's servo and the opening and closing values of the servo 
         (in radiants, [0, pi] or [-p/2, pi/2])
     """
-    def __init__(self, pin, open_val=math.pi, close_val=0):
+    def __init__(self, pin, open_val=45, close_val=0):
         self.pin = int(pin)
         self.open_val = open_val
         self.close_val = close_val
         
         self.attach_servo = rospy.ServiceProxy('arduino/servo_attach', ServoAttach)
+        self.detach_servo = rospy.ServiceProxy('arduino/servo_attach', ServoDetach)
+
         self.attach_servo(self.pin)
         
         self.servo_write = rospy.ServiceProxy('arduino/servo_write', ServoWrite)
@@ -86,11 +88,16 @@ class ArduinoGripper():
         """
         service call /arduino/servo_write ID close_val
         """
-        self.servo_write(self.pin, self.open_val)
+        self.servo_write(self.pin, self.close_val)
 
 
     def get_joint_position(self):
         return self.servo_read(self.pin).position
+    
+    def on_shutdown(self):
+        rospy.loginfo('Detaching servo')
+        self.detach_servo(self.pin)
+        rospy.sleep(2)
 
     def set_pos(self, val):
         """

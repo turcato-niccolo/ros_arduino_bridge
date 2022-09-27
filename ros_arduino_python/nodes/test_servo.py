@@ -11,27 +11,32 @@ import sys
 
 from ros_arduino_python.arduino_servo import ArduinoGripper
 
+global gripper
+
+def shutdown():
+    if not gripper is None:
+        gripper.on_shutdown()
+    
 
 if __name__ == '__main__':
-    # Set a name for the node
-    node_name = "test_servo"
-    # Initialize the node
-    rospy.init_node(node_name)
+    node_name = "test_servo" # Set a name for the node
+    rospy.init_node(node_name) # Initialize the node
+    rospy.on_shutdown(shutdown)
     
-    delay = 3
+    delay = 2
     if len(sys.argv) == 2:
         gripper = ArduinoGripper(sys.argv[1])
     else:
         gripper = ArduinoGripper(sys.argv[1], sys.argv[2], sys.argv[3])
         
 
-    while not rospy.is_shutdown():      
-        rospy.loginfo('Open gripper')
-        gripper.open()
-            
-        rospy.sleep(delay)
+    #while not rospy.is_shutdown():      
+    rospy.loginfo('Open gripper')
+    gripper.open()
+          
+    rospy.sleep(delay)
+      
+    rospy.loginfo('Close gripper')
+    gripper.close()
         
-        rospy.loginfo('Close gripper')
-        gripper.close()
-        
-        rospy.sleep(delay)
+    rospy.sleep(delay)
