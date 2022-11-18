@@ -1,4 +1,4 @@
-For ROS Kinetic, Ubuntu 16.04 and Python2 (might work with ROS Indigo and Ubuntu 14.04)
+Tested for ROS Melodic, Ubuntu 18 and Python2 (originally developed for ROS Kinetic in Ubuntu 16)
 
 Table of Contents
 =================
@@ -52,7 +52,7 @@ System Requirements
 -------------------
 **ROS Dependencies**
 
-    $ sudo apt-get install ros-kinetic-diagnostic-updater ros-kinetic-control-msgs ros-kinetic-nav-msgs
+    $ sudo apt-get install ros-melodic-diagnostic-updater ros-melodic-control-msgs ros-melodic-nav-msgs
 
 **Python Serial:** To install the python-serial package under Ubuntu, use the command:
 
@@ -139,7 +139,7 @@ Installation of the ros\_arduino\_bridge Package
 ----------------------------------------------
 
     $ cd ~/catkin_workspace/src
-    $ git clone https://github.com/hbrobotics/ros_arduino_bridge.git
+    $ git clone https://github.com/turcato-niccolo/ros_arduino_bridge
     $ cd ~/catkin_workspace
     $ catkin_make
 
